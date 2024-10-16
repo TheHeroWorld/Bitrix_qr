@@ -33,14 +33,22 @@ async def generate_qr(text, uuid):
     
     
 async def request_birt(qr_base64, uuid):
-        data = {
+    data = {
         "entityTypeId": "31",
         "id": uuid,
         "fields": {
-            "ufCrm_SMART_INVOICE_1712655537962":["QR.png", qr_base64]
+            "ufCrm_SMART_INVOICE_1712655537962": ["QR.png", qr_base64]
         }
     }
-        async with aiohttp.ClientSession() as session:
-            async with session.post(URL, data=data) as response:
-                print(response)
+    
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.post(URL, json=data) as response:
+                response.raise_for_status()
+                result = await response.json()
+                print(result)
+        except aiohttp.ClientError as e:
+            print(f"Произошла ошибка HTTP: {e}")
+        except Exception as e:
+            print(f"Произошла ошибка: {e}")
                 
