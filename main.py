@@ -14,7 +14,6 @@ app = FastAPI()
 
 @app.post("/bitr/")
 async def root(text: str, uuid: str, password: str):
-    print(PASSWORD)
     if password == PASSWORD:
         await generate_qr(text, uuid)
         
@@ -27,7 +26,6 @@ async def generate_qr(text, uuid):
     with open(name, "rb") as qr:
         qr_base64 =base64.b64encode(qr.read())
         await request_birt(qr_base64, uuid)
-        print(PASSWORD, URL, qr_base64)
     os.remove(name)
     
     
